@@ -1,0 +1,67 @@
+<form id="selection" style="width: 45%;">
+    <button type="submit">Submit</button>
+</form>
+<div class="objectDisplay" style="width: 45%; padding: 10px; border: 1px solid #ccc; white-space: pre-wrap;">
+    GET /api/checout/selection
+    if api-token exist try to get selection else create a selection and set api-token in sessionStorage    
+</div>
+
+<script>
+    $(document).ready(function () {
+        let centraData = localStorage.getItem('centra-data');
+        if (centraData) {
+            centraData = JSON.parse(centraData);
+            let selection = centraData.selection;
+            let skus = '';
+            selection.items.forEach(item => {
+                skus += item.sku + ',';
+            });
+            skus = skus.slice(0, -1);
+            let data = {
+                'tocountry' : selection.shippingAddress.country,
+                'tozipcode' : selection.shippingAddress.zipCode,
+                'currency'  : selection.currency??"SEK",
+                'language'  : selection.language??"sv",
+                'tocity'    : selection.shippingAddress.city,
+                'artikel'   : skus
+            }
+            $.ajax({
+                type: 'POST',
+                url: '/delivery-options',
+                data: data,
+                success: function (response) {
+                    if (response) {
+                        window.udcWidget.disable()
+                        window.udcWidget.updateList(response)
+                        window.udcWidget.enable()
+                    }
+                },
+                error: function (error) {
+                    console.error('get options error: ', error);
+                }
+            });
+        }
+        $('#selection').submit(function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                type: 'GET',
+                headers: {"api-token": sessionStorage.getItem('api-token')},
+                url: '/api/checout/selection',
+                data: formData,
+                success: function (response) {
+                    if (response) {
+
+                        if (sessionStorage.getItem('api-token') === undefined || sessionStorage.getItem('api-token') !== response.token ){
+                            sessionStorage.setItem('api-token', response.token);
+                        }
+                        console.log('get selection:', response);
+                    }
+                },
+                error: function (error) {
+                    console.error('get selection error: ', error);
+                }
+            });
+        });
+    });
+</script>

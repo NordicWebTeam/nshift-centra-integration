@@ -1,0 +1,97 @@
+<form id="createShipment" style="width: 45%;">
+    <label for="preparedId" class="required">Prepared Id:</label>
+    <input type="text" name="prepareId" placeholder="100011" required><br>
+    <button type="submit">Submit</button>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#createShipment').submit(function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                type: 'POST',
+                url: '/shipment',
+                data: formData,
+                success: function (response) {
+                    if (response) {
+                        console.log(response);
+                    }
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
+</script>
+
+<div class="objectDisplay" style="width: 45%; padding: 10px; border: 1px solid #ccc; white-space: pre-wrap;">
+    POST /prepared-shipments/'+prepareId+'/shipments
+    body example:
+    {
+        "printConfig": {
+            "target1Media": "thermo-250",
+            "target1Type": "zpl",
+            "target1XOffset": 0,
+            "target1YOffset": 0,
+            "target1Options": [{
+                "key": "mode",
+                "value": "DT"
+            }],
+            "target2Media": "laser-a4",
+            "target2Type": "pdf",
+            "target2XOffset": 0,
+            "target2YOffset": 0,
+            "target3Media": null,
+            "target3Type": null,
+            "target3XOffset": 0,
+            "target3YOffset": 0,
+            "target4Media": null,
+            "target4Type": null,
+            "target4XOffset": 0,
+            "target4YOffset": 0
+        },
+        "shipment": {
+            "sender": {
+                "name": "nShift Gbg",
+                "address1": "Skeppsbron 5-6",
+                "zipcode": "41121",
+                "city": "GÖTEBORG",
+                "country": "SE",
+                "phone": "+46 31 725 35 00",
+                "email": "email1@example.com"
+            },
+            "senderPartners": [{
+                "id": "PLAB",
+                "custNo": "XX"
+                }],
+            "receiver": {
+                "name": "nShift Sthm",
+                "address1": "Tegnérgatan 34",
+                "zipcode": "11359",
+                "city": "STOCKHOLM",
+                "country": "SE",
+                "phone": "+46 8 34 35 15",
+                "email": "email2@example.com"
+            },
+            "parcels": [{
+                "copies": 1,
+                "weight": 1.2,
+                "contents": "important things",
+                "valuePerParcel": true
+            }],
+            "orderNo": "1003",
+            "senderReference": "sender ref 1003",
+            "receiverReference": "receiver ref 345",
+            "options": [{
+                "message": "This is order number 1003",
+                "to": "email2@example.com",
+                "id": "ENOT",
+                "languageCode": "sv",
+                "from": "email1@example.com"
+            }]
+        },
+    }
+    
+</div>

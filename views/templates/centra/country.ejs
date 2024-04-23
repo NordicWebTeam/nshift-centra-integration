@@ -1,0 +1,32 @@
+<form id="setCountry" style="width: 45%;">
+    <label for="country" class="required">Country:</label>
+    <input type="text" name="country" placeholder="SE" required><br>
+    <button type="submit">Submit</button>
+</form>
+<div class="objectDisplay" style="width: 45%; padding: 10px; border: 1px solid #ccc; white-space: pre-wrap;">
+    PUT api/checout/countries/{country}
+    Country ISO 3166-1 alpha-2, for example SE
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#setCountry').submit(function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                type: 'PUT',
+                headers: {"api-token": sessionStorage.getItem('api-token')},
+                url: '/api/checout/countries',
+                data: formData,
+                success: function (response) {
+                    if (response) {
+                        console.log('set country:', response);
+                    }
+                },
+                error: function (error) {
+                    console.error('set country error: ', error);
+                }
+            });
+        });
+    });
+</script>

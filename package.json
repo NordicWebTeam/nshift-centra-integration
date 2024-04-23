@@ -1,0 +1,26 @@
+{
+  "name": "nshift-centra-integration",
+  "version": "1.0.0",
+  "description": "Example of how to integrate NShift with Centra",
+  "scripts": {
+    "devStart": "nodemon server.js"
+  },
+  "keywords": [
+    "nshift",
+    "rest",
+    "api",
+    "sdk",
+    "centra"
+  ],
+  "author": "Nordic Web Team",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.7",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "nshift-api-sdk": "^1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

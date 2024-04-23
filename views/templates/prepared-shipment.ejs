@@ -1,0 +1,86 @@
+<form id="preparedShipmentForm" style="width: 45%;">
+    <!-- Selected Option and Addons -->
+    <h2>Selected Option and Addons</h2>
+    <label for="selectedOption" class="required">Selected Option:</label>
+    <input type="text" id="selectedOption" name="selectedOption" readonly required><br>
+
+    <!-- Submit Button -->
+    <button type="submit">Submit</button>
+</form>
+<div class="objectDisplay" style="width: 45%; padding: 10px; border: 1px solid #ccc; white-space: pre-wrap;">
+    POST /delivery-checkouts/'+deliveryCheckoutId
+    body example:
+    {
+        "shipment": {
+          "sender": {
+            "quickId": "1",
+            "name": "nShift Gbg",
+            "address1": "Skeppsbron 5-6",
+            "zipcode": "41121",
+            "city": "GÖTEBORG",
+            "country": "SE",
+            "phone": "+46 31 725 35 00",
+           "email": "email1@example.com"
+          },
+          "receiver": {
+            "name": "nShift Sthm",
+            "address1": "Tegnérgatan 34",
+            "zipcode": "11359",
+            "city": "STOCKHOLM",
+            "country": "SE",
+            "phone": "+46 8 34 35 15",
+            "email": "email2@example.com"
+          },
+          "parcels": [{
+            "copies": "1",
+            "weight": "1.2",
+            "contents": "important things",
+            "valuePerParcel": true
+          }],
+          "orderNo": "order number 123",
+          "senderReference": "sender ref 234",
+          "receiverReference": "receiver ref 345",
+          "options": [{
+            "message": "This is order number 123",
+            "to": "email2@example.com",
+            "id": "ENOT",
+            "languageCode": "sv",
+            "from": "email1@example.com"
+          }]
+        },
+        "selectedOptionId": "aa59c047-21cc-46fa-bb62-3ca2566b6bbe",
+        "selectedAddons": [{
+          "id": "FCNOTIFYSMS",
+          "fields": [{
+            "id": "sms",
+             "value": "0700000000"
+          }]
+        }],
+        "prepareId": "100011",
+        "returnShipmentData": false,
+        "language": "en"
+    }
+    
+</div>
+
+<script>
+  $(document).ready(function () {
+      $('#preparedShipmentForm').submit(function (e) {
+          e.preventDefault();
+          var formData = $(this).serialize();
+          $.ajax({
+              type: 'POST',
+              url: '/prepared-shipment',
+              data: formData,
+              success: function (response) {
+                  if (response) {
+                      console.log('create prepared shipment: ', response);
+                  }
+              },
+              error: function (error) {
+                  console.error('create prepared shipment error: ', error);
+              }
+          });
+      });
+  });
+</script>

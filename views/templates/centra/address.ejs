@@ -1,0 +1,113 @@
+<form id="updateAddress" style="width: 45%;">
+
+    <label for="email" class="required">Email:</label>
+    <input type="email" name="email" placeholder="test@example.com" required><br>
+
+    <label for="firstName" class="required">First Name:</label>
+    <input type="text" name="firstName" placeholder="Peter" required><br>
+
+    <label for="lastName" class="required">Last Name:</label>
+    <input type="text" name="lastName" placeholder="Petersson" required><br>
+
+    <label for="address1" class="required">Address1:</label>
+    <input type="text" name="address1" placeholder="Street 1" required><br>
+
+    <label for="zipCode" class="required">Zip Code:</label>
+    <input type="text" name="zipCode" placeholder="12345" required><br>
+
+    <label for="phoneNumber" class="required">Phone Number:</label>
+    <input type="text" name="phoneNumber" placeholder="123456789" required><br>
+
+    <label for="city" class="required">City:</label>
+    <input type="text" name="city" placeholder="Stockholm" required><br>
+
+    <label for="country" class="required">Country:</label>
+    <input type="text" name="country" placeholder="SE" required><br>
+
+    <button type="submit">Submit</button>
+</form>
+
+<div class="objectDisplay" style="width: 45%; padding: 10px; border: 1px solid #ccc; white-space: pre-wrap;">
+    PUT api/checkout/payment-fields
+    body example
+    {
+        "language": "en",
+        "address": {
+          "email": "test@example.com",
+          "firstName": "Peter",
+          "lastName": "Petersson",
+          "address1": "Street 1",
+          "zipCode": "12345",
+          "phoneNumber": "123456789",
+          "city": "Stockholm",
+          "country": "SE"
+        },
+        "shippingAddress": {
+          "email": "test@example.com",
+          "firstName": "Peter",
+          "lastName": "Petersson",
+          "address1": "Street 1",
+          "zipCode": "90210",
+          "phoneNumber": "123456789",
+          "city": "San Francisco",
+          "country": "US",
+          "state": "CA"
+        }
+      }
+</div>
+
+<script>
+    $(document).ready(function () {
+        function getOptions(session) {
+            let selection = session.selection;
+            let skus = '';
+            selection.items.forEach(item => {
+                skus += item.sku + ',';
+            });
+            skus = skus.slice(0, -1);
+            let data = {
+                'tocountry' : selection.shippingAddress.country,
+                'tozipcode' : selection.shippingAddress.zipCode,
+                'currency'  : selection.currency??"SEK",
+                'language'  : selection.language??"sv",
+                'tocity'    : selection.shippingAddress.city,
+                'artikel'   : skus
+            }
+            $.ajax({
+                type: 'POST',
+                url: '/delivery-options',
+                data: data,
+                success: function (response) {
+                    if (response) {
+                        window.udcWidget.disable()
+                        window.udcWidget.updateList(response)
+                        window.udcWidget.enable()
+                    }
+                },
+                error: function (error) {
+                    console.error('get options error: ', error);
+                }
+            });
+        }
+        $('#updateAddress').submit(function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                type: 'PUT',
+                headers: {"api-token": sessionStorage.getItem('api-token')},
+                url: '/api/checkout/payment-fields',
+                data: formData,
+                success: function (response) {
+                    if (response) {
+                        localStorage.setItem('centra-data', JSON.stringify(response));
+                        getOptions(response);
+                        console.log('update address:', response);
+                    }
+                },
+                error: function (error) {
+                    console.error('update address error: ', error);
+                }
+            });
+        });
+    });
+</script>

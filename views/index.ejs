@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nshift</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/udc-lib"></script>
+</head>
+<style>
+h1, h2 {
+    text-align: center;
+    padding: 20px;
+}
+form, #nshift {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+    width: 50%;
+    margin: 0 auto;
+
+}
+input[type=text], input[type=number], input[type=email], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=submit] {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button[type=submit]:hover {
+    background-color: #45a049;
+    color: white;
+    cursor: pointer;
+}
+.required:after {
+content:" *";
+color: red;
+}
+
+.prepared-shipment, .shipment-from-prepared {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+}
+.objectDisplay {
+    width: 45%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    white-space: pre-wrap;
+}
+
+</style>
+<body>
+    <%- include('./templates/header'); %>
+
+    <h2>Parameters needed to get nshift shipping methods</h2>
+    <div class="udc">
+        <%- include('./templates/unifaun-delivery-checkout'); %>
+    </div>
+    <h2>Create a prepared Shipment</h2>
+    <div class="prepared-shipment">
+        <%- include('./templates/prepared-shipment'); %>
+    </div>
+    <h2>Shipment from prepared</h2>
+    <div class="shipment-from-prepared">
+        <%- include('./templates/shipment-from-prepared'); %>
+    </div>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nshift</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/udc-lib"></script>
+</head>
+<style>
+    h1, h2 {
+        text-align: center;
+        padding: 20px;
+    }
+    form, #nshift {
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 20px;
+        width: 50%;
+        margin: 0 auto;
+    
+    }
+    input[type=text], input[type=number], input[type=email], select {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    input[type=submit] {
+        width: 100%;
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    button[type=submit]:hover {
+        background-color: #45a049;
+        color: white;
+        cursor: pointer;
+    }
+    .required:after {
+    content:" *";
+    color: red;
+    }
+    .get-selection, .set-country, .add-item-to-selection, .update-address, .nshift-plugin, .payment-resultCallback, .centra-payment, .payment-resultCallback {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 20px;
+    }
+</style>
+
+<body>
+    <%- include('./templates/header'); %>
+    <h4>Note: Check console log for api responses</h4>
+    <h2>Get/Create selection</h2>
+    <div class="get-selection">
+        <%- include('./templates/centra/selection'); %>
+    </div>
+    <h2>Set country</h2>
+    <div class="set-country">
+        <%- include('./templates/centra/country'); %>
+    </div>
+    <h2>Add item to selection</h2>
+    <div class="add-item-to-selection">
+        <%- include('./templates/centra/items'); %>
+    </div>
+    <h2>Update address</h2>
+    <div class="update-address">
+        <%- include('./templates/centra/address'); %>
+    </div>
+    <h2>nShift plugin</h2>
+    <div class="nshift-plugin">
+        <%- include('./templates/centra/udc'); %>
+    </div>
+    <h2>Centra Payment</h2>
+    <div class="centra-payment">
+        <%- include('./templates/centra/payment'); %>
+    </div>
+    <h2>Create shipment from Payment resultCallback</h2>
+    <div class="payment-resultCallback">
+        <%- include('./templates/centra/prepared-shipment'); %>
+    </div>
+</body>
+</html>

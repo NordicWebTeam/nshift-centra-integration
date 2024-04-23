@@ -1,0 +1,41 @@
+<form id="createPreparedShipment" style="width: 45%;">
+    <button type="submit">Submit</button>
+</form>
+
+<div class="objectDisplay" style="width: 45%; padding: 10px; border: 1px solid #ccc; white-space: pre-wrap;">
+    POST api/checkout/payment-result
+    body example
+    {
+        "paymentMethodFields": {
+          "centraPaymentMethod": "klarna",
+          "klarna_order": "XXYYZZ"
+        }
+    }
+    or
+    {
+        "paymentMethodFields": {}
+    } //When no parameters were sent to paymentReturnPage
+
+    if order is returned map the shipping object and create prepared shipment
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#createPreparedShipment').submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'GET',
+                headers: {"api-token": sessionStorage.getItem('api-token')},
+                url: '/api/checout/payment-result',
+                success: function (response) {
+                    if (response) {
+                        console.log('create prepared shipment:', response);
+                    }
+                },
+                error: function (error) {
+                    console.error('create prepared shipment error: ', error);
+                }
+            });
+        });
+    });
+</script>

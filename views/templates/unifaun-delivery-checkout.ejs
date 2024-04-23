@@ -1,0 +1,87 @@
+<div>
+    <form id="deliveryOptionsForm">
+        <label for="tocountry" class="required">To Country:</label>
+        <input type="text" name="tocountry" placeholder="SE" required><br>
+
+        <label for="tozipcode" class="required">To Zip Code:</label>
+        <input type="text" name="tozipcode" placeholder="11215" required><br>
+
+        <label for="currency" class="required">Currency:</label>
+        <input type="text" name="currency" placeholder="SEK" required><br>
+
+        <label for="language" class="required">Language:</label>
+        <input type="text" name="language" placeholder="sv" required><br>
+
+        <label for="cartprice">Cart Price:</label>
+        <input type="number" step="0.01" min="0" name="cartprice" placeholder="30"><br>
+
+        <label for="weight" >Weight:</label>
+        <input type="number" step="0.01" min="0.01" name="weight" placeholder="1"><br>
+
+        <label for="tocity" >To City:</label>
+        <input type="text" name="tocity" placeholder="Stockholm"><br>
+
+        <label for="artikel">Articles (comma-separated):</label>
+        <input type="text" name="artikel" placeholder="sku1,sku2,sku3"><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        $(document).ready(function () {
+            $('#deliveryOptionsForm').submit(function (e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    type: 'POST',
+                    url: '/delivery-options',
+                    data: formData,
+                    success: function (response) {
+                        if (response) {
+                            console.log('get delivery options:', response);
+                            window.udcWidget.disable()
+                            window.udcWidget.updateList(response)
+                            window.udcWidget.enable()
+                        }
+                    },
+                    error: function (error) {
+                        console.error('get delivery options error: ', error);
+                    }
+                });
+            });
+        });
+    </script>
+
+    <br>
+
+
+    <div id="nshift"></div>
+    <script>
+        let self = this;
+        function processUserActionCallback(event, that){
+            console.log('selected option: ', event)
+            let data = JSON.stringify(event);
+            document.getElementById('selectedOption').title = data;
+            document.getElementById('selectedOption').value = data;
+        }
+        $(document).ready(function () {
+            jQuery.ajax({
+                url: "/udc-config",
+                type: "GET",
+                data: "",
+                dataType: "json",
+                success: function(response) {
+                    let udcPluginConfig = response;
+                    let widgetHolder = document.getElementById(udcPluginConfig.placeholderId)
+                    window.udcWidget = window.UnifaunCheckout.createAt(widgetHolder, udcPluginConfig.config)
+                    
+                    window.udcWidget.configuration.resultCallback = new Proxy(self.processUserActionCallback, {
+                        apply: function(target, event, that) {
+                            self.processUserActionCallback(that[0], self);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</div>

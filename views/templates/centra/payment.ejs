@@ -1,0 +1,49 @@
+<form id="payment" style="width: 45%;">
+    <button type="submit">Submit</button>
+</form>
+<div class="objectDisplay" style="width: 45%; padding: 10px; border: 1px solid #ccc; white-space: pre-wrap;">
+    POST api/checout/payment
+    body example
+    {
+        "paymentMethod": "klarna",
+        "paymentReturnPage": "http://example.com/success",
+        "paymentFailedPage": "http://example.com/failure",
+        "termsAndConditions": true,
+        "address": {
+          "newsletter": false,
+          "email": "abc123@example.com",
+          "phoneNumber": "123456789",
+          "firstName": "Test Billing",
+          "lastName": "Testson Billing",
+          "address1": "Address One",
+          "address2": "Address Two",
+          "zipCode": "12345",
+          "city": "Malmö",
+          "country": "SE"
+        }
+      }
+      //if order is returned create shipment else use /payment-result endpoint to get the order and create prepared shipment
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#payment').submit(function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                type: 'POST',
+                headers: {"api-token": sessionStorage.getItem('api-token')},
+                url: '/api/checout/payment',
+                data: formData,
+                success: function (response) {
+                    if (response) {
+                        console.log('payment:', response);
+                    }
+                },
+                error: function (error) {
+                    console.error('payment error: ', error);
+                }
+            });
+        });
+    });
+</script>

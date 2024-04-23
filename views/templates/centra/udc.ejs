@@ -1,0 +1,51 @@
+<div style="width: 45%;">
+    <div id="nshift"></div>
+</div>
+
+<div class="objectDisplay" style="width: 45%; padding: 10px; border: 1px solid #ccc; white-space: pre-wrap;">
+    PUT api/checout/shipping-methods/{shippingMethod}
+    TODO
+    In order to use this endpoint,create the shipping methods in centra to match the nShift shipping methods
+</div>
+
+<script>
+    let self = this;
+    function processUserActionCallback(event, that){
+        console.log('selected option: ', event)
+        let data = JSON.stringify(event);
+        $.ajax({
+            type: 'PUT',
+            headers: {"api-token": sessionStorage.getItem('api-token')},
+            url: '/api/checout/shipping-methods',
+            data: {'selectedOption': data},
+            success: function (response) {
+                if (response) {
+                    console.log('set shipping method:', response);
+                }
+            },
+            error: function (error) {
+                console.error('set shipping method error: ', error);
+            }
+        });
+        
+    }
+    $(document).ready(function () {
+        $.ajax({
+            url: "/udc-config",
+            type: "GET",
+            data: "",
+            dataType: "json",
+            success: function(response) {
+                let udcPluginConfig = response;
+                let widgetHolder = document.getElementById(udcPluginConfig.placeholderId)
+                window.udcWidget = window.UnifaunCheckout.createAt(widgetHolder, udcPluginConfig.config)
+                
+                window.udcWidget.configuration.resultCallback = new Proxy(self.processUserActionCallback, {
+                    apply: function(target, event, that) {
+                        self.processUserActionCallback(that[0], self);
+                    }
+                });
+            }
+        });
+    });
+</script>

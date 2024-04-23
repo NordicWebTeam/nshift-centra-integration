@@ -1,0 +1,42 @@
+<form id="addItemToSelection" style="width: 45%;">
+    <label for="itemId" class="required">Item:</label>
+    <input type="text" name="itemId" placeholder="5-3" required><br>
+    <label for="quantity" class="required">Quantity:</label>
+    <input type="number" name="quantity" placeholder="1" required><br>
+    <button type="submit">Submit</button>
+</form>
+
+<div class="objectDisplay" style="width: 45%; padding: 10px; border: 1px solid #ccc; white-space: pre-wrap;">
+    POST api/checout/items/{item}
+    Product Item ID
+    body example
+    {
+        "quantity": 1,
+        "category": 32,
+        "productUrl": "https://example.com/shirts/nice-product",
+        "comment": "my custom engraving"
+    }
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#addItemToSelection').submit(function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                type: 'POST',
+                headers: {"api-token": sessionStorage.getItem('api-token')},
+                url: '/api/checout/items',
+                data: formData,
+                success: function (response) {
+                    if (response) {
+                        console.log('add item to selection:', response);
+                    }
+                },
+                error: function (error) {
+                    console.error('add item to selection error: ', error);
+                }
+            });
+        });
+    });
+</script>
