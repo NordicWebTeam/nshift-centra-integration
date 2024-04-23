@@ -25,4 +25,4 @@ centraBearerToken=
 ```bash
 npm run devStart
 ```
-## Open your web browser and navigate to http://localhost:3000 to see the integration in action.
+## Open your web browser and navigate to http://localhost:3001 to see the integration in action.
